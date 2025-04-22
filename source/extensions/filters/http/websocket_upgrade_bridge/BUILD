@@ -14,12 +14,12 @@ envoy_cc_library(
     srcs = ["websocket_upgrade_bridge.cc"],
     hdrs = ["websocket_upgrade_bridge.h"],
     deps = [
+        "//envoy/http:filter_interface",
+        "//envoy/stream_info:filter_state_interface",
         "//source/common/common:assert_lib",
         "//source/common/common:base64_lib",
         "//source/common/http:header_utility_lib",
-        "//source/common/stream_info:stream_info_impl",
-        "@envoy//include/envoy/http:filter_interface",
-        "@envoy//include/envoy/stream_info:filter_state_interface",
+        "//source/common/stream_info:stream_info_lib",
     ],
 )
 
@@ -28,9 +28,8 @@ envoy_cc_extension(
     srcs = ["config.cc"],
     hdrs = ["config.h"],
     deps = [
-        ":websocket_upgrade_bridge_lib",
-        "@envoy//envoy/server:filter_config_interface",
         "//envoy/registry",
+        "//envoy/server:filter_config_interface",
         "//source/common/protobuf:utility_lib",
         "//source/extensions/filters/http/common:factory_base_lib",
     ],
