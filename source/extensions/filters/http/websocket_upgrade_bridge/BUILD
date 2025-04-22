@@ -13,3 +13,9 @@ envoy_cc_library(
     ],
     visibility = ["//visibility:public"],
 )
+
+alias(
+    name = "config_envoy_extension",
+    actual = ":config",
+    visibility = ["//visibility:public"],
+)
