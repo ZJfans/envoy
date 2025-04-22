@@ -5,9 +5,9 @@
 namespace Envoy {
 namespace Extensions {
 namespace HttpFilters {
-namespace WebSocketHandshakeBridge {
+namespace WebSocketUpgradeBridge {
 
-class WebSocketHandshakeBridgeFilterFactory : public Server::Configuration::NamedHttpFilterConfigFactory {
+class WebSocketUpgradeBridgeFilterFactory : public Server::Configuration::NamedHttpFilterConfigFactory {
 public:
   Http::FilterFactoryCb createFilterFactoryFromProto(const Protobuf::Message&, const std::string&,
                                                      Server::Configuration::FactoryContext&) override;
@@ -15,11 +15,11 @@ public:
   ProtobufTypes::MessagePtr createEmptyConfigProto() override;
 
   std::string name() const override {
-    return "envoy.filters.http.websocket_handshake_bridge";
+    return "envoy.filters.http.websocket_upgrade_bridge";
   }
 };
 
-} // namespace WebSocketHandshakeBridge
+} // namespace WebSocketUpgradeBridge
 } // namespace HttpFilters
 } // namespace Extensions
 } // namespace Envoy

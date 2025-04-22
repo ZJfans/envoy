@@ -1,29 +1,30 @@
 #include "config.h"
-#include "websocket_handshake_bridge.h"
+#include "websocket_upgrade_bridge.h"
 
 namespace Envoy {
 namespace Extensions {
 namespace HttpFilters {
-namespace WebSocketHandshakeBridge {
+namespace WebSocketUpgradeBridge {
 
-Http::FilterFactoryCb WebSocketHandshakeBridgeFilterFactory::createFilterFactoryFromProto(
+Http::FilterFactoryCb WebSocketUpgradeBridgeFilterFactory::createFilterFactoryFromProto(
     const Protobuf::Message&, const std::string&,
     Server::Configuration::FactoryContext&) {
+
   return [](Http::FilterChainFactoryCallbacks& callbacks) {
-    auto filter = std::make_shared<WebSocketHandshakeBridgeFilter>();
+    auto filter = std::make_shared<WebSocketUpgradeBridgeFilter>();
     callbacks.addStreamDecoderFilter(filter);
     callbacks.addStreamEncoderFilter(filter);
   };
 }
 
-ProtobufTypes::MessagePtr WebSocketHandshakeBridgeFilterFactory::createEmptyConfigProto() {
-  return std::make_unique<ProtobufWkt::Struct>(); // currently no config needed
+ProtobufTypes::MessagePtr WebSocketUpgradeBridgeFilterFactory::createEmptyConfigProto() {
+  return std::make_unique<ProtobufWkt::Struct>();
 }
 
-REGISTER_FACTORY(WebSocketHandshakeBridgeFilterFactory,
+REGISTER_FACTORY(WebSocketUpgradeBridgeFilterFactory,
                  Server::Configuration::NamedHttpFilterConfigFactory);
 
-} // namespace WebSocketHandshakeBridge
+} // namespace WebSocketUpgradeBridge
 } // namespace HttpFilters
 } // namespace Extensions
 } // namespace Envoy
