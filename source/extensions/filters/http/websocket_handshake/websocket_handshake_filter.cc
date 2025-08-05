@@ -14,12 +14,10 @@ public:
   WebsocketHandshakeFilter() = default;
 
   Http::FilterHeadersStatus decodeHeaders(Http::RequestHeaderMap& headers, bool) override {
-    const auto method = headers.getMethodValue();
-    const auto upgrade = headers.getUpgradeValue();
-    const bool is_websocket = (method == Http::Headers::get().MethodValues.Connect &&
-                               headers.getProtocolValue() == "websocket") ||
-                              StringUtil::caseInsensitiveCompare(upgrade, "websocket");
-    if (is_websocket) {
+    const bool is_websocket_h2_connect = 
+        (headers.getMethodValue() == Http::Headers::get().MethodValues.Connect) &&
+        (headers.getProtocolValue() == "websocket");
+    if (is_websocket_h2_connect) {
       auto key_header = headers.get(Http::CustomHeaders::get().SecWebSocketKey);
       if (key_header == nullptr) {
         const std::string generated_key = Base64::encode(Random::String::generate(16), 16);
@@ -43,8 +41,7 @@ public:
       }
       const std::string magic = sec_websocket_key_ + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
       const std::string sha1_result = Envoy::Common::Crypto::Utility::getSha1Digest(magic);
-      const std::string expected = Base64::encode(sha1_result); // standard base64
-
+      const std::string expected = Base64::encode(sha1_result);
       if (!StringUtil::caseInsensitiveCompare(accept_header->value().getStringView(), expected)) {
         sendLocalReject("Invalid Sec-WebSocket-Accept value");
         return Http::FilterHeadersStatus::StopIteration;
